@@ -43,6 +43,7 @@ export default {
   created () {
     var nw = new Normalizer()
     axios.get(this.src).then(response => {
+      console.log(response.data)
       var lines = response.data.match(/^.*([\n\r]+|$)/gm)
       var codeStart = false
 
