@@ -9,7 +9,7 @@
       <prism v-else-if="value.type === 'code'" language="python" style="height:800px;width:800px;margin:auto">
         {{ value.value }}
       </prism>
-      <img v-else-if="value.type === 'image'" :src="value.url" :alt="value.value"/>
+      <img v-else-if="value.type === 'image'" :src="value.url" :alt="value.value" :width="value.width" :height="value.height"/>
     </span>
   </div>
 </template>
@@ -51,7 +51,7 @@ export default {
 
       for (let i = 0; i < lines.length; i++) {
         var line = lines[i]
-        var imgRegex = /!\[(.*?)\]\((.*?)\)/
+        var imgRegex = /!\[(.*?)\]\((.*?), (.*?), (.*?)\)/
         if (line.startsWith('```')) {
           codeStart = !codeStart
           while (true) {
@@ -77,10 +77,14 @@ export default {
         } else if (codeStart === false && imgRegex.test(line)) {
           var imgURL = line.match(imgRegex)[2]
           var imgDescription = line.match(imgRegex)[1]
+          var width = line.match(imgRegex)[3]
+          var height = line.match(imgRegex)[4]
           var obj2 = {}
           obj2['type'] = 'image'
           obj2['value'] = imgDescription
           obj2['url'] = imgURL
+          obj2['height'] = height
+          obj2['width'] = width
           this.mdText.push(obj2)
         } else {
           var obj3 = {}
